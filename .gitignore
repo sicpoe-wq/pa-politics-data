@@ -1,0 +1,4 @@
+node_modules/
+raw/
+v1/.prev-seats.json
+__pycache__/

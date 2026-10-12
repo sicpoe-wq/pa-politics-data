@@ -1,0 +1,47 @@
+{
+ "schema": 1,
+ "generated": "2026-10-12T13:36:34+00:00",
+ "files": {
+  "seats.json": {
+   "sha256": "b8e7fc5795b57ace41a490b381004b27e680c30e866bd40d9a40a4e5bf44308c",
+   "bytes": 411023,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "results.json": {
+   "sha256": "ad78eae28886425f8ca1736f2977c8e5471181f4a7a95f37d275f6c5cb917e1f",
+   "bytes": 344765,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "floor.json": {
+   "sha256": "4254fd4dfb2a788c896f640c42ac75cbdd362811686f47244499b7efbfd82411",
+   "bytes": 64277,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "votes/us_house.json": {
+   "sha256": "16dcfeb7935a1980df859cbd2599568aec05d2a2449303f149cc858009d849ba",
+   "bytes": 422585,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "votes/us_senate.json": {
+   "sha256": "bd30c8145183faff74e21c131d36512b6a8eea659f0880ae06f3b741e4cba46d",
+   "bytes": 434026,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "votes/pa_house.json": {
+   "sha256": "2e52e1fdbcc9ae752833854e6139c664b913eea00a58c66c651f29f7343b6302",
+   "bytes": 1782391,
+   "updated": "2026-10-12T13:36:34+00:00"
+  },
+  "votes/pa_senate.json": {
+   "sha256": "fbb61caa33c9e5ed6a1d3e545818ba0d73d7b36ce47a8dc939e96a10ee53e24f",
+   "bytes": 649451,
+   "updated": "2026-10-12T13:36:34+00:00"
+  }
+ },
+ "resultsStatus": {
+  "source": "PA Department of State \u2013 electionreturns.pa.gov",
+  "ok": true,
+  "errors": [],
+  "lastSuccess": "2026-10-12T13:33:04+00:00"
+ }
+}

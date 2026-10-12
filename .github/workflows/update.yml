@@ -1,0 +1,53 @@
+name: update-data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 10 * * *"        # daily ~6:17 AM ET
+    - cron: "*/15 * 4 11 *"      # every 15 min on Nov 4 UTC (= election night Nov 3 7 PM ET onward)
+    - cron: "7 * 5-30 11 *"      # hourly through the count / certification
+    - cron: "*/30 12-23 3 11 *"  # every 30 min during election day (ET 8 AM-7 PM)
+concurrency: { group: update-data, cancel-in-progress: false }
+permissions: { contents: write }
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env: { OUT: v1, RAW: raw }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - run: npm ci || npm install
+      - run: cp v1/seats.json v1/.prev-seats.json
+      - name: Election results (PA DOS)
+        run: python3 scripts/fetch_results.py
+        continue-on-error: true
+      - name: Officeholders + candidates
+        id: seats
+        run: python3 scripts/fetch_raw.py && python3 scripts/build_data.py
+        continue-on-error: true
+      - name: Roll-call votes
+        run: npx tsx scripts/update_votes.ts && python3 scripts/merge_votes.py
+        continue-on-error: true
+      - name: Floor schedules
+        run: npx tsx scripts/snapshot_floor.ts
+        continue-on-error: true
+      - name: Validate (gate)
+        id: test
+        run: npm test
+        continue-on-error: true
+      - name: Revert on failed validation
+        if: steps.test.outcome != 'success'
+        run: |
+          git checkout -- v1 work
+          echo "::error::Validation failed; previous published data kept"
+          exit 1
+      - name: Publish
+        run: |
+          python3 scripts/publish.py
+          git config user.name "pa-politics-data bot"; git config user.email "actions@users.noreply.github.com"
+          git add v1 work
+          git diff --cached --quiet && { echo "no changes"; exit 0; }
+          git commit -m "data update $(date -u +%FT%TZ)" && git push
