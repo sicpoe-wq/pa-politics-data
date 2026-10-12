@@ -188,7 +188,7 @@ try:
             if not st or not r.get('leader') or e['date'] != st['nextElection']: continue
             w = r['candidates'][0]
             st['elect'] = {'name': w['name'], 'party': w['party'], 'election': e['name'], 'electionKey': e['key'], 'certified': True,
-                           'takesOffice': (datetime.date.fromisoformat(st['termEnds']) + datetime.timedelta(days=1)).isoformat() if re.match(r'^\d{4}-\d{2}-\d{2}$', st['termEnds'] or '') else None,
+                           'takesOffice': (datetime.date.fromisoformat(st['termEnds']) + datetime.timedelta(days=1 if st['termEnds'][5:7] == '11' else 0)).isoformat() if re.match(r'^\d{4}-\d{2}-\d{2}$', st['termEnds'] or '') else None,
                            'source': 'PA Department of State official returns'}
 except FileNotFoundError:
     pass

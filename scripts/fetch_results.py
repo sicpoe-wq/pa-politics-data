@@ -109,5 +109,9 @@ def main():
     elections.sort(key=lambda e: e['date'], reverse=True)
     status['lastSuccess'] = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds')
     status['ok'] = not status['errors']
+    for e in elections:
+        for r in e['races']:
+            for c in r['candidates']: c['name'] = title_name(c['name'])
+            if r.get('leader'): r['leader'] = title_name(r['leader'])
     json.dump({'generated': status['lastSuccess'], 'status': status, 'elections': elections}, open(f'{OUT}/results.json', 'w'), separators=(',', ':'))
 if __name__ == '__main__': main()

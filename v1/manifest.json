@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated": "2026-10-12T13:36:34+00:00",
+ "generated": "2026-10-12T13:41:42+00:00",
  "files": {
   "seats.json": {
    "sha256": "b8e7fc5795b57ace41a490b381004b27e680c30e866bd40d9a40a4e5bf44308c",
@@ -8,9 +8,9 @@
    "updated": "2026-10-12T13:36:34+00:00"
   },
   "results.json": {
-   "sha256": "ad78eae28886425f8ca1736f2977c8e5471181f4a7a95f37d275f6c5cb917e1f",
+   "sha256": "629b295c49038706ae1167fea23fa3fcd019d2ef4a256c72d34e1cb3058ba337",
    "bytes": 344765,
-   "updated": "2026-10-12T13:36:34+00:00"
+   "updated": "2026-10-12T13:41:42+00:00"
   },
   "floor.json": {
    "sha256": "4254fd4dfb2a788c896f640c42ac75cbdd362811686f47244499b7efbfd82411",
@@ -42,6 +42,6 @@
   "source": "PA Department of State \u2013 electionreturns.pa.gov",
   "ok": true,
   "errors": [],
-  "lastSuccess": "2026-10-12T13:33:04+00:00"
+  "lastSuccess": "2026-10-12T13:41:39+00:00"
  }
 }
