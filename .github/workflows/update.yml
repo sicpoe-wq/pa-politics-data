@@ -28,6 +28,9 @@ jobs:
         id: seats
         run: python3 scripts/fetch_raw.py && python3 scripts/build_data.py
         continue-on-error: true
+      - name: Candidate events (Mobilize, Wikipedia)
+        run: python3 scripts/fetch_events.py
+        continue-on-error: true
       - name: Roll-call votes
         run: npx tsx scripts/update_votes.ts && python3 scripts/merge_votes.py
         continue-on-error: true

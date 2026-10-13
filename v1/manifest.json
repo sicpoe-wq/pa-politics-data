@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated": "2026-10-12T13:52:06+00:00",
+ "generated": "2026-10-13T08:39:17+00:00",
  "files": {
   "seats.json": {
    "sha256": "b8e7fc5795b57ace41a490b381004b27e680c30e866bd40d9a40a4e5bf44308c",
@@ -16,6 +16,11 @@
    "sha256": "b8e9c6fb0c8ba052246d95e159094274a6fa8a905a4d5b92308c4a06435aa7ab",
    "bytes": 64251,
    "updated": "2026-10-12T13:52:06+00:00"
+  },
+  "events.json": {
+   "sha256": "d94a725323b6b9d92b5c94264805354a253df12016a645d9df1195dc3d14365c",
+   "bytes": 90271,
+   "updated": "2026-10-13T08:39:17+00:00"
   },
   "votes/us_house.json": {
    "sha256": "42a4d4dd3219eb95c4fdde37420f7e1267e2cc8ba360f76e132ce504d236f44a",

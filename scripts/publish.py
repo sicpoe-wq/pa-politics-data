@@ -1,7 +1,7 @@
 """Write v1/manifest.json (sha256 + size per file). Run only after tests pass."""
 import hashlib, json, os, datetime
 OUT = os.environ.get('OUT', 'v1')
-files = ['seats.json', 'results.json', 'floor.json', 'votes/us_house.json', 'votes/us_senate.json', 'votes/pa_house.json', 'votes/pa_senate.json']
+files = ['seats.json', 'results.json', 'floor.json', 'events.json', 'votes/us_house.json', 'votes/us_senate.json', 'votes/pa_house.json', 'votes/pa_senate.json']
 prev = {}
 try: prev = json.load(open(f'{OUT}/manifest.json'))
 except Exception: pass

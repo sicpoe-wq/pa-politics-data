@@ -86,3 +86,19 @@ test("parsers handle real source documents", () => {
   assert.equal(nextSessionDay(F("pa_house_session_days.html"), new Date(2026, 9, 11)), "2026-10-19");
   assert.deepEqual(parseCsv('a,b\n"x, y",2\n'), [{ a: "x, y", b: "2" }]);
 });
+test("candidate events are well-formed and attributable", () => {
+  const ev = J("events.json"); const now = Date.now();
+  assert.ok(Array.isArray(ev.status) && ev.status.length >= 2);
+  const keys = new Set(seats.flatMap((s) => s.candidates.map((c: any) => `${s.id}|${c.name}`)));
+  for (const [k, v] of Object.entries(ev.byCandidate) as [string, any][]) {
+    assert.ok(keys.has(k), "event for unknown candidate " + k);
+    for (const e of v.events) {
+      assert.ok(e.id && e.title && e.kind && ["Mobilize", "Wikipedia"].includes(e.source), k + " " + e.id);
+      assert.ok(/^https:\/\//.test(e.url), k + " url " + e.url);
+      const t = Date.parse(e.start); assert.ok(!isNaN(t), k + " start " + e.start);
+      assert.ok(t > now - (ev.pastDays + 2) * 864e5, k + " too old " + e.start);
+      assert.equal(e.timeKnown, /T\d\d:/.test(e.start));
+    }
+    for (const l of v.links) assert.ok(/^https:\/\//.test(l.url) && l.label, k + " link");
+  }
+});
