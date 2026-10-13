@@ -13,7 +13,14 @@ seats = json.load(open(f'{OUT}/seats.json'))['seats']
 prev = {}
 try: prev = json.load(open(f'{OUT}/events.json'))
 except Exception: pass
-def get(url, t=60): return urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=t).read()
+import time, urllib.error
+def get(url, t=60):
+    for i in range(6):  # Mobilize rate-limits bursts (HTTP 429): pace requests and back off
+        try:
+            r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=t).read(); time.sleep(1.5); return r
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or i == 5: raise
+            time.sleep(min(120, int(e.headers.get('Retry-After') or 0) or 10 * 2 ** i))
 def norm(s): return re.sub(r'[^a-z ]', '', unicodedata.normalize('NFKD', s).encode('ascii', 'ignore').decode().lower()).split()
 SUFFIX = {'jr', 'sr', 'ii', 'iii', 'iv'}
 def key(n): w = [x for x in norm(n) if x not in SUFFIX and len(x) > 1]; return (w[0], w[-1]) if w else ('', '')
