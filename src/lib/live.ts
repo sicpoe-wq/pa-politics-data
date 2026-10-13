@@ -27,14 +27,17 @@ const MONTHS: Record<string, string> = { jan: "01", feb: "02", mar: "03", apr: "
 const pad = (n: number | string) => String(n).padStart(2, "0");
 
 // ---------------- US House (Clerk roll-call XML) ----------------
-export function parseHouseRoll(xml: string, year: number, n: number): RollCall | null {
+/** state "*" keeps every member, keyed "ST:id" */
+export function parseHouseRoll(xml: string, year: number, n: number, state = "PA"): RollCall | null {
   if (!xml.includes("<rollcall-vote")) return null;
   const d = /(\d{1,2})-([A-Za-z]{3})-(\d{4})/.exec(tag(xml, "action-date"));
   const votes: Record<string, string> = {};
   const re = /<recorded-vote>\s*<legislator([^>]*)>[\s\S]*?<\/legislator>\s*<vote>([^<]*)<\/vote>/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(xml))) {
-    if (/state="PA"/.test(m[1])) { const id = /name-id="([^"]+)"/.exec(m[1]); if (id) votes[id[1]] = m[2].trim(); }
+    const st = /state="([A-Z]{2})"/.exec(m[1])?.[1]; const id = /name-id="([^"]+)"/.exec(m[1])?.[1];
+    if (!st || !id) continue;
+    if (state === "*") votes[`${st}:${id}`] = m[2].trim(); else if (st === state) votes[id] = m[2].trim();
   }
   const tot = /<totals-by-vote>([\s\S]*?)<\/totals-by-vote>/.exec(xml)?.[1] ?? "";
   return {
@@ -44,11 +47,11 @@ export function parseHouseRoll(xml: string, year: number, n: number): RollCall |
     url: `https://clerk.house.gov/Votes/${year}${n}`, src: `https://clerk.house.gov/evs/${year}/roll${String(n).padStart(3, "0")}.xml`, votes,
   };
 }
-export async function fetchNewHouseRolls(year: number, after: number, max = 60): Promise<RollCall[]> {
+export async function fetchNewHouseRolls(year: number, after: number, max = 60, state = "PA"): Promise<RollCall[]> {
   const out: RollCall[] = [];
   for (let n = after + 1; n <= after + max; n++) {
     const r = await fetchText(`https://clerk.house.gov/evs/${year}/roll${String(n).padStart(3, "0")}.xml`);
-    const rc = r.status === 200 ? parseHouseRoll(r.text, year, n) : null;
+    const rc = r.status === 200 ? parseHouseRoll(r.text, year, n, state) : null;
     if (!rc) break;
     out.push(rc);
   }
@@ -56,12 +59,15 @@ export async function fetchNewHouseRolls(year: number, after: number, max = 60):
 }
 
 // ---------------- US Senate (senate.gov LIS XML) ----------------
-export function parseSenateVote(xml: string, cong: number, sess: number, n: number): RollCall | null {
+export function parseSenateVote(xml: string, cong: number, sess: number, n: number, state = "PA"): RollCall | null {
   if (!xml.includes("<roll_call_vote")) return null;
   const dm = /([A-Za-z]+) (\d{1,2}), (\d{4})/.exec(tag(xml, "vote_date"));
   const votes: Record<string, string> = {};
   const re = /<member>([\s\S]*?)<\/member>/g; let m: RegExpExecArray | null;
-  while ((m = re.exec(xml))) if (tag(m[1], "state") === "PA") votes[tag(m[1], "lis_member_id")] = tag(m[1], "vote_cast");
+  while ((m = re.exec(xml))) {
+    const st = tag(m[1], "state");
+    if (state === "*") votes[`${st}:${tag(m[1], "lis_member_id")}`] = tag(m[1], "vote_cast"); else if (st === state) votes[tag(m[1], "lis_member_id")] = tag(m[1], "vote_cast");
+  }
   const doc = /<document>([\s\S]*?)<\/document>/.exec(xml)?.[1] ?? "";
   const nn = String(n).padStart(5, "0");
   const base = `https://www.senate.gov/legislative/LIS/roll_call_votes/vote${cong}${sess}/vote_${cong}_${sess}_${nn}`;
@@ -74,7 +80,7 @@ export function parseSenateVote(xml: string, cong: number, sess: number, n: numb
     url: base + ".htm", src: base + ".xml", votes,
   };
 }
-export async function fetchNewSenateVotes(cong: number, sess: number, after: number, max = 60): Promise<RollCall[]> {
+export async function fetchNewSenateVotes(cong: number, sess: number, after: number, max = 60, state = "PA"): Promise<RollCall[]> {
   const menu = await fetchText(`https://www.senate.gov/legislative/LIS/roll_call_lists/vote_menu_${cong}_${sess}.xml`);
   if (menu.status !== 200) throw new Error(`senate.gov vote menu HTTP ${menu.status}`);
   const nums = [...menu.text.matchAll(/<vote_number>(\d+)<\/vote_number>/g)].map((m) => +m[1]);
@@ -83,7 +89,7 @@ export async function fetchNewSenateVotes(cong: number, sess: number, after: num
   for (let n = latest; n > after && out.length < max; n--) {
     const nn = String(n).padStart(5, "0");
     const r = await fetchText(`https://www.senate.gov/legislative/LIS/roll_call_votes/vote${cong}${sess}/vote_${cong}_${sess}_${nn}.xml`);
-    const rc = r.status === 200 ? parseSenateVote(r.text, cong, sess, n) : null;
+    const rc = r.status === 200 ? parseSenateVote(r.text, cong, sess, n, state) : null;
     if (rc) out.push(rc);
   }
   return out;

@@ -1,3 +1,1 @@
-{ "name": "pa-politics-data", "private": true, "type": "module",
-  "scripts": { "test": "tsx --test tests/*.test.ts" },
-  "devDependencies": { "tsx": "^4.19.2", "typescript": "^5.7.3" } }
+{"name":"pa-politics-data","private":true,"type":"module","scripts":{"test":"tsx --test tests/*.test.ts"},"devDependencies":{"mapshaper":"^0.7.84","tsx":"^4.19.2","typescript":"^5.7.3"}}

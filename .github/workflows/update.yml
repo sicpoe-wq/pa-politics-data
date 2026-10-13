@@ -11,7 +11,7 @@ permissions: { contents: write }
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 50
     env: { OUT: v1, RAW: raw }
     steps:
       - uses: actions/checkout@v4
@@ -24,18 +24,25 @@ jobs:
       - name: Election results (PA DOS)
         run: python3 scripts/fetch_results.py
         continue-on-error: true
-      - name: Officeholders + candidates
+      - name: Officeholders + candidates (PA full depth)
         id: seats
         run: python3 scripts/fetch_raw.py && python3 scripts/build_data.py
         continue-on-error: true
-      - name: Candidate events (Mobilize, Wikipedia)
-        run: python3 scripts/fetch_events.py
+      - name: Roll-call votes (PA chambers + all members of Congress)
+        run: npx tsx scripts/update_votes.ts && python3 scripts/merge_votes.py; npx tsx scripts/update_votes_us.ts
         continue-on-error: true
-      - name: Roll-call votes
-        run: npx tsx scripts/update_votes.ts && python3 scripts/merge_votes.py
+      - name: 50-state build (Open States, Wikipedia, congress-legislators)
+        run: python3 scripts/fetch_raw_states.py && python3 scripts/build_states.py
+        continue-on-error: true
+      - name: Candidate events, all states (daily run / manual only)
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 10 * * *'
+        run: python3 scripts/fetch_mobilize.py && ./scripts/events_all.sh
         continue-on-error: true
       - name: Floor schedules
         run: npx tsx scripts/snapshot_floor.ts
+        continue-on-error: true
+      - name: Stage v2 national + PA extras
+        run: python3 scripts/publish_v2.py stage
         continue-on-error: true
       - name: Validate (gate)
         id: test
@@ -44,13 +51,13 @@ jobs:
       - name: Revert on failed validation
         if: steps.test.outcome != 'success'
         run: |
-          git checkout -- v1 work
+          git checkout -- v1 v2 work
           echo "::error::Validation failed; previous published data kept"
           exit 1
       - name: Publish
         run: |
-          python3 scripts/publish.py
+          python3 scripts/publish.py && python3 scripts/publish_v2.py
           git config user.name "pa-politics-data bot"; git config user.email "actions@users.noreply.github.com"
-          git add v1 work
+          git add v1 v2 work
           git diff --cached --quiet && { echo "no changes"; exit 0; }
           git commit -m "data update $(date -u +%FT%TZ)" && git push

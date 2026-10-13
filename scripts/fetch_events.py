@@ -9,9 +9,11 @@ import json, os, re, datetime, urllib.request, unicodedata
 RAW = os.environ.get('RAW', 'raw') + '/'; OUT = os.environ.get('OUT', 'v1')
 UA = {'User-Agent': 'pa-politics-data/1.0 (+https://github.com/sicpoe-wq/pa-politics-data)'}
 NOW = datetime.datetime.now(datetime.timezone.utc); PAST_DAYS = 30
-seats = json.load(open(f'{OUT}/seats.json'))['seats']
+STATE = os.environ.get('STATE', 'PA')
+SEATS = os.environ.get('SEATS', f'{OUT}/seats.json'); EVOUT = os.environ.get('EVOUT', f'{OUT}/events.json')
+seats = json.load(open(SEATS))['seats']
 prev = {}
-try: prev = json.load(open(f'{OUT}/events.json'))
+try: prev = json.load(open(EVOUT))
 except Exception: pass
 import time, urllib.error
 def get(url, t=60):
@@ -60,15 +62,9 @@ def kind(title, t):
         if re.search(rx, title, re.I): return k
     return {'RALLY': 'Rally', 'TOWN_HALL': 'Town hall', 'MEET_GREET': 'Meet & greet'}.get(t, 'Public appearance')
 try:
-    since = int((NOW - datetime.timedelta(days=PAST_DAYS)).timestamp())
-    nowts = int(NOW.timestamp()); evs, seen = [], set()
-    for q in (f'timeslot_start=gte_{nowts}', f'timeslot_start=gte_{since}&timeslot_end=lt_{nowts}'):
-        url = f'https://api.mobilize.us/v1/events?state=PA&{q}&per_page=100'
-        while url:
-            d = json.loads(get(url))
-            for e in d['data']:
-                if e['id'] not in seen: seen.add(e['id']); evs.append(e)
-            url = d.get('next')
+    mob = json.load(open(RAW + 'mobilize.json'))  # national pass by fetch_mobilize.py
+    if (NOW - datetime.datetime.fromisoformat(mob['fetched'])).total_seconds() > 3 * 86400: raise RuntimeError('Mobilize snapshot older than 3 days')
+    evs = [e for e in mob['events'] if (e.get('location') or {}).get('region') == STATE or ((e.get('sponsor') or {}).get('state') == STATE and e.get('is_virtual'))]
     n_att = 0
     for e in evs:
         if e.get('visibility') != 'PUBLIC' or e.get('address_visibility') == 'PRIVATE' and False: pass
@@ -164,9 +160,12 @@ def debate_tables(page, seat_for):
     return n
 try:
     sid = {s['id']: s for s in seats}
+    if STATE != 'PA': raise LookupError('debate tables parsed for PA only')
     n = debate_tables('2026_Pennsylvania_gubernatorial_election', lambda d: sid.get('pa-gov'))
     n += debate_tables('2026_United_States_House_of_Representatives_elections_in_Pennsylvania', lambda d: d and sid.get(f'us-house-{d}'))
     status.append({'source': 'Wikipedia debate & forum tables', 'ok': True, 'attached': n})
+except LookupError:
+    pass
 except Exception as ex:
     status.append({'source': 'Wikipedia debate & forum tables', 'ok': False, 'error': str(ex)[:200]})
 
@@ -177,7 +176,7 @@ except Exception: soc = {}
 import csv
 osr = {}
 try:
-    for r in csv.DictReader(open(RAW + 'pa.csv')): osr[r['name']] = r
+    for r in csv.DictReader(open(RAW + ('pa.csv' if STATE == 'PA' else f'os/{STATE.lower()}.csv'))): osr[r['name']] = r
 except Exception: pass
 for s, c in cands:
     if not c.get('incumbent'): continue
@@ -193,5 +192,5 @@ for s, c in cands:
         if r.get('instagram'): link(s, c, 'Instagram', f"https://www.instagram.com/{r['instagram']}")
 for v in out.values(): v['events'].sort(key=lambda e: e['start'])
 json.dump({'generated': NOW.isoformat(timespec='seconds'), 'pastDays': PAST_DAYS, 'status': status, 'byCandidate': out},
-          open(f'{OUT}/events.json', 'w'), separators=(',', ':'))
-print(status); print('candidates with events:', sum(1 for v in out.values() if v['events']), 'with links:', sum(1 for v in out.values() if v['links']))
+          open(EVOUT, 'w'), separators=(',', ':'))
+print(STATE, status); print('candidates with events:', sum(1 for v in out.values() if v['events']), 'with links:', sum(1 for v in out.values() if v['links']))
