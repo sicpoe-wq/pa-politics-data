@@ -54,7 +54,7 @@ for m in re.finditer(r'\n==([A-Z][A-Za-z ]+)==\n', house):
         if d: cur = 'AL' if d.group(1) == 'AL' else str(int(d.group(1)))
         if cur and 'lainlist' in r:
             i = r.lower().find('plainlist'); H26.setdefault(cur and (st, cur), []).extend(cand_list(r[i:]))
-def summary_rows(page, anchor):
+def summary_rows(page, anchor, force=None):
     s = wt(page); i = s.find(anchor); out = {}
     if i < 0: return out
     tb = s[i:s.find('\n|}', i)]
@@ -63,9 +63,10 @@ def summary_rows(page, anchor):
         if not h: continue
         label = h.group(1).strip(); st = next((s2 for s2, n, _ in STATES if label.startswith(n)), None)
         if not st or 'lainlist' not in r: continue
-        j = r.lower().find('plainlist'); out[(st, 'special' if 'special' in label.lower() else 'regular')] = cand_list(r[j:])
+        j = r.lower().find('plainlist'); out[(st, force or ('special' if 'special' in label.lower() else 'regular'))] = cand_list(r[j:])
     return out
 S26 = summary_rows('2026_United_States_Senate_elections', '=== Elections leading to the next Congress ===')
+S26.update(summary_rows('2026_United_States_Senate_elections', '=== Special elections during the preceding Congress ===', 'special'))
 G26 = summary_rows('2026_United_States_gubernatorial_elections', '=== States ===')
 gov = {}
 gs = wt('List_of_current_United_States_governors')
@@ -122,11 +123,12 @@ for st, sname, fips in STATES:
                    'bioguide': m['id']['bioguide'], 'lis': m['id'].get('lis'), 'since': str(first), 'url': t.get('url'), 'phone': t.get('phone'), 'office': t.get('address')}
             end_y = int(t['end'][:4]); ne = gen_date(end_y - 1) if end_y - 1 >= 2026 else None
             if t['type'] == 'sen':
-                special = (st, 'special') in S26 and t['class'] == 3 and end_y != 2027
+                special = (st, 'special') in S26 and end_y != 2027 and end_y <= 2027
                 up = end_y == 2027 or special
                 cands = mark_inc(S26.get((st, 'special' if special else 'regular'), []) if up else [], nm)
                 seats.append({'id': f"us-sen-{t['class']}", 'state': st, 'level': 'Federal', 'body': 'US Senate', 'title': f"U.S. Senator (Class {t['class']})", 'district': None,
-                              'incumbent': inc, 'termEnds': t['end'], 'nextElection': GEN if up else ne, 'upIn2026': up, 'candidates': cands,
+                              'incumbent': inc, 'termEnds': t['end'], 'termEndsNote': 'Appointed seat: serves until the Nov 3, 2026 special-election winner is seated (date per congress-legislators).' if special else None,
+                              'nextElection': GEN if up else ne, 'upIn2026': up, 'candidates': cands,
                               'candidatesStatus': 'verified' if cands else ('unknown' if up else 'not-yet'),
                               'notes': (['2026 special election for the remainder of this term.'] if special else []) + ([] if up else [f'Next regular election {ne[:4] if ne else "—"}.']),
                               'sources': [S_CL] + ([S_S26] if up else []), 'map': None})
