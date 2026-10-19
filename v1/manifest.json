@@ -1,31 +1,31 @@
 {
  "schema": 1,
- "generated": "2026-10-18T14:10:20+00:00",
+ "generated": "2026-10-19T17:10:21+00:00",
  "files": {
   "seats.json": {
-   "sha256": "3ab7aa549fcc0a19c96525ca402ab7174cdf3bb90714568eade34d2275df9059",
+   "sha256": "419a22ea5803543bac67957d644136b79458dd7bff77755354972fb38d1bba61",
    "bytes": 411023,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "updated": "2026-10-19T17:10:21+00:00"
   },
   "results.json": {
-   "sha256": "12868ee8034db969c150ecbaccef869a7176269bc4602ca645294d42e3629a21",
-   "bytes": 442294,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "sha256": "9ff012401a40f69b94bf526cde8c20c251c3a9bec7c56aba17a1b1ef0145c7f4",
+   "bytes": 493929,
+   "updated": "2026-10-19T17:10:21+00:00"
   },
   "floor.json": {
-   "sha256": "923312fb174a0908b912d774df8d9f73335c5c71d8bb1eba15be36de8780f81d",
-   "bytes": 64750,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "sha256": "41b0765bd82a689b0e05af462a569a7d7fd449e35432f941a40a879710d30fa2",
+   "bytes": 64724,
+   "updated": "2026-10-19T17:10:21+00:00"
   },
   "events.json": {
-   "sha256": "a726e61cec6805c8e77ef08ece9db3d23cc28153fb5d8f85fcfd4132387b3322",
-   "bytes": 88540,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "sha256": "b7000313874b1c5f29245389bf757d8cd0b3433f1ffc7dbd5a8081c2d2c5734c",
+   "bytes": 96018,
+   "updated": "2026-10-19T17:10:21+00:00"
   },
   "votes/us_house.json": {
-   "sha256": "ac4e9b2cb6dcf1ffe7e8e9330a4d5b927e8094c3b0c9dc0522b7e0de31bc3a2f",
+   "sha256": "1d61e64d5640f5f5031155619bafbf3c319d29aca26151fc291faa2a3ee36542",
    "bytes": 422585,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "updated": "2026-10-19T17:10:21+00:00"
   },
   "votes/us_senate.json": {
    "sha256": "9cc4582cae4ae56b944dcbad28641284a9cb3b3b9479cbbef0edcc281f54a206",
@@ -45,8 +45,10 @@
  },
  "resultsStatus": {
   "source": "PA Department of State \u2013 electionreturns.pa.gov",
-  "ok": true,
-  "errors": [],
+  "ok": false,
+  "errors": [
+   "election list: HTTP Error 403: Forbidden"
+  ],
   "lastSuccess": "2026-10-18T14:04:11+00:00"
  }
 }
