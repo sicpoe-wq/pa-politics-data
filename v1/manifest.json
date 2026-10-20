@@ -1,54 +1,52 @@
 {
  "schema": 1,
- "generated": "2026-10-19T17:10:21+00:00",
+ "generated": "2026-10-20T15:18:07+00:00",
  "files": {
   "seats.json": {
-   "sha256": "419a22ea5803543bac67957d644136b79458dd7bff77755354972fb38d1bba61",
+   "sha256": "cec3744c0db9a1ba2311fcca36eddd0ebb7604c4eb3b0e4a47e861d31209976f",
    "bytes": 411023,
-   "updated": "2026-10-19T17:10:21+00:00"
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "results.json": {
-   "sha256": "9ff012401a40f69b94bf526cde8c20c251c3a9bec7c56aba17a1b1ef0145c7f4",
-   "bytes": 493929,
-   "updated": "2026-10-19T17:10:21+00:00"
+   "sha256": "469b1fff4a2552efdf5373af83701a11f03e5c34caf1795edb588b803e69c1bf",
+   "bytes": 445435,
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "floor.json": {
-   "sha256": "41b0765bd82a689b0e05af462a569a7d7fd449e35432f941a40a879710d30fa2",
-   "bytes": 64724,
-   "updated": "2026-10-19T17:10:21+00:00"
+   "sha256": "452000b19bee21f9e183a0c925489886d8458690118781ed5bd6996a03a95e21",
+   "bytes": 89690,
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "events.json": {
-   "sha256": "b7000313874b1c5f29245389bf757d8cd0b3433f1ffc7dbd5a8081c2d2c5734c",
-   "bytes": 96018,
-   "updated": "2026-10-19T17:10:21+00:00"
+   "sha256": "6f4361354a07cfde470d62b73b5444a287efdcc0f4ca551dee465d38aac208e8",
+   "bytes": 95939,
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "votes/us_house.json": {
-   "sha256": "1d61e64d5640f5f5031155619bafbf3c319d29aca26151fc291faa2a3ee36542",
+   "sha256": "38674fbdc8aad6c2ca94e0b3b7045c0ceb58d18b86259156c8e4606718193b6a",
    "bytes": 422585,
-   "updated": "2026-10-19T17:10:21+00:00"
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "votes/us_senate.json": {
-   "sha256": "9cc4582cae4ae56b944dcbad28641284a9cb3b3b9479cbbef0edcc281f54a206",
+   "sha256": "3be5c21b15848d561bc07347c231e08200c031e08a8c6756c22cd516bfc1bfb8",
    "bytes": 434026,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "votes/pa_house.json": {
-   "sha256": "89d3cc09adb0aa74d0f89f6ed7f11abe1391c6ac7254342af74c2c776e633061",
-   "bytes": 1782391,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "sha256": "a69ba8f5e068e9c24515f438c0c7e95a9dd49c3bdc5cddebd353fa007088d015",
+   "bytes": 1858561,
+   "updated": "2026-10-20T15:18:07+00:00"
   },
   "votes/pa_senate.json": {
-   "sha256": "dd72c69fe8b508ed0005ea0456eb349bc20b58b31a328f52bd5099bd0c2f34a1",
-   "bytes": 649451,
-   "updated": "2026-10-18T14:10:20+00:00"
+   "sha256": "8d4319f8842b41cf6cd591b89c1a1139067a30b0264b7a4b5e9105269f42ae5c",
+   "bytes": 659467,
+   "updated": "2026-10-20T15:18:07+00:00"
   }
  },
  "resultsStatus": {
   "source": "PA Department of State \u2013 electionreturns.pa.gov",
-  "ok": false,
-  "errors": [
-   "election list: HTTP Error 403: Forbidden"
-  ],
-  "lastSuccess": "2026-10-18T14:04:11+00:00"
+  "ok": true,
+  "errors": [],
+  "lastSuccess": "2026-10-20T15:11:41+00:00"
  }
 }
