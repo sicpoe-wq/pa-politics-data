@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated": "2026-11-05T06:37:00+00:00",
+ "generated": "2026-11-05T15:26:32+00:00",
  "files": {
   "seats.json": {
    "sha256": "3e389fc542de94c2d6dc520b0e50fc2974ebfd8bf7cbca679d3af46f3d2610e6",
@@ -8,14 +8,14 @@
    "updated": "2026-10-22T15:29:31+00:00"
   },
   "results.json": {
-   "sha256": "76993caf4ae65d365f26de05e6e31185d42f69f1a90aa3ad7d2bd09b75fc45d9",
-   "bytes": 446408,
-   "updated": "2026-11-05T06:37:00+00:00"
+   "sha256": "ef2225ea82e94d253a97d784da4eed649fd2df5605d0fae04ccf79c717ef934a",
+   "bytes": 446410,
+   "updated": "2026-11-05T15:26:32+00:00"
   },
   "floor.json": {
-   "sha256": "7db2a8a8649e981be8ad0cc77e3f220e67a20e6442e8e8bac7331489f64f5f6d",
+   "sha256": "2842ceb5709ba894c3b2ae86c4893a3e839272d083496db3b094f2db177874c6",
    "bytes": 54404,
-   "updated": "2026-11-05T06:37:00+00:00"
+   "updated": "2026-11-05T15:26:32+00:00"
   },
   "events.json": {
    "sha256": "fc93927c5f8a7fe984342fc13d85d71a8013ff27bbfd7f8a4b542817d95c2e1a",
@@ -23,9 +23,9 @@
    "updated": "2026-11-04T18:11:41+00:00"
   },
   "votes/us_house.json": {
-   "sha256": "377df2a687bb1a12f814e117e11370db993079e95f3bdbfeca265dccc5245c6b",
+   "sha256": "c11e7a4570e034c833fcd1ec292c0033dc3fbc2f223ec5a7589afcd426066318",
    "bytes": 422585,
-   "updated": "2026-11-05T06:37:00+00:00"
+   "updated": "2026-11-05T15:26:32+00:00"
   },
   "votes/us_senate.json": {
    "sha256": "646433084433033604c9d576a2e8eec801c5fc982c6b9c2daf9af29fe0168aee",
@@ -33,20 +33,20 @@
    "updated": "2026-10-22T15:29:31+00:00"
   },
   "votes/pa_house.json": {
-   "sha256": "0dd6612a982c61115daafd88daf70b63e107bb3a88ebb1dcf49a3275ad62b966",
+   "sha256": "dbb9048211ae588d190f8ab9ca9710350f27b6590000c1a471d3dac26d86e327",
    "bytes": 2059063,
-   "updated": "2026-11-05T06:37:00+00:00"
+   "updated": "2026-11-05T15:26:32+00:00"
   },
   "votes/pa_senate.json": {
-   "sha256": "d72efd79d49444465233909895ec8ac29ff8181b957134b118c7362c550ca696",
+   "sha256": "e7f72540fb0308c190533318644d5f7608b28cb188b66f33be5826d9aa2d29a5",
    "bytes": 725065,
-   "updated": "2026-11-05T06:37:00+00:00"
+   "updated": "2026-11-05T15:26:32+00:00"
   }
  },
  "resultsStatus": {
   "source": "PA Department of State \u2013 electionreturns.pa.gov",
   "ok": true,
   "errors": [],
-  "lastSuccess": "2026-11-05T06:36:34+00:00"
+  "lastSuccess": "2026-11-05T15:26:13+00:00"
  }
 }
